@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package at.oebb.bsk.model
+package dev.mbo.poi.model
 
-import at.oebb.bsk.util.RandomNumberUtil
+import dev.mbo.poi.util.RandomNumberUtil
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal

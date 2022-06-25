@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package at.oebb.bsk
+package dev.mbo.poi
 
-import at.oebb.bsk.model.POIModel
-import at.oebb.bsk.util.RessourceUtil
+import dev.mbo.poi.model.POIModel
+import dev.mbo.poi.util.RessourceUtil
 import com.fasterxml.jackson.databind.ObjectMapper
 
 /**

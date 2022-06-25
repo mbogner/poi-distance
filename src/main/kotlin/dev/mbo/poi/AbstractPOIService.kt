@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package at.oebb.bsk
+package dev.mbo.poi
 
-import at.oebb.bsk.model.Coordinate
-import at.oebb.bsk.model.POI
-import at.oebb.bsk.model.POIModel
+import dev.mbo.poi.model.Coordinate
+import dev.mbo.poi.model.POI
+import dev.mbo.poi.model.POIModel
 import java.time.Instant
 import java.util.stream.Collectors
 

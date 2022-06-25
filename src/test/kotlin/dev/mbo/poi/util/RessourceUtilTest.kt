@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package at.oebb.bsk.util
+package dev.mbo.poi.util
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertThrows

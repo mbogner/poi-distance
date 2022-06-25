@@ -14,25 +14,21 @@
  * limitations under the License.
  */
 
-package at.oebb.bsk.model
+package dev.mbo.poi.util
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import dev.mbo.poi.model.POIModel
 import java.math.BigDecimal
+import java.math.RoundingMode
+import java.util.concurrent.ThreadLocalRandom
 
-internal class POITest {
+class RandomNumberUtil {
 
-    @Test
-    fun distanceFrom() {
-        val poi = POI(
-            id = "id1",
-            name = "name1",
-            coordinate = Coordinate(BigDecimal.ZERO, BigDecimal.ZERO),
-        )
-        val distance = poi.distanceFrom(Coordinate(BigDecimal.ONE, BigDecimal.ONE))
-        // 1^2 + 1^2 = 2
-        // sqrt(2) = 1.414213562373095
-        assertThat(distance).isEqualTo(BigDecimal("1.41421356"))
+    companion object {
+        fun randomBigDecimal(min: BigDecimal, max: BigDecimal, scale: Int = POIModel.COORDINATE_SCALE): BigDecimal {
+            return BigDecimal(
+                ThreadLocalRandom.current().nextDouble(min.toDouble(), max.toDouble())
+            ).setScale(scale, RoundingMode.HALF_UP)
+        }
     }
 
 }

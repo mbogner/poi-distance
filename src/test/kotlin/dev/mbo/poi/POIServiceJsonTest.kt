@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package at.oebb.bsk
+package dev.mbo.poi
 
-import at.oebb.bsk.model.Coordinate
-import at.oebb.bsk.model.POI
-import at.oebb.bsk.util.RessourceUtilTest
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import dev.mbo.poi.model.Coordinate
+import dev.mbo.poi.model.POI
+import dev.mbo.poi.util.RessourceUtilTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

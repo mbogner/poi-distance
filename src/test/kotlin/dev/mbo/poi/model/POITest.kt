@@ -14,23 +14,25 @@
  * limitations under the License.
  */
 
-package at.oebb.bsk.util
+package dev.mbo.poi.model
 
-import java.io.InputStream
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 
-class RessourceUtil {
+internal class POITest {
 
-    companion object {
-        /**
-         * Loads a resource from classpath.
-         * @param path of the resource to load relative to class or absolute starting from classpath root. Prefixing
-         *             with classpath: or file: is not necessary.
-         */
-        fun loadClasspathRessource(path: String): InputStream {
-            return this::class.java.getResourceAsStream(path) ?: throw IllegalStateException(
-                "could not load $path from classpath"
-            )
-        }
+    @Test
+    fun distanceFrom() {
+        val poi = POI(
+            id = "id1",
+            name = "name1",
+            coordinate = Coordinate(BigDecimal.ZERO, BigDecimal.ZERO),
+        )
+        val distance = poi.distanceFrom(Coordinate(BigDecimal.ONE, BigDecimal.ONE))
+        // 1^2 + 1^2 = 2
+        // sqrt(2) = 1.414213562373095
+        assertThat(distance).isEqualTo(BigDecimal("1.41421356"))
     }
 
 }

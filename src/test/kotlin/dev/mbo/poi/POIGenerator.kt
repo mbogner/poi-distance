@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package at.oebb.bsk
+package dev.mbo.poi
 
-import at.oebb.bsk.model.CoordinateTest
-import at.oebb.bsk.model.POI
-import at.oebb.bsk.model.POIModel
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import dev.mbo.poi.model.CoordinateTest
+import dev.mbo.poi.model.POI
+import dev.mbo.poi.model.POIModel
 import java.nio.file.Paths
 import java.time.Instant
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package at.oebb.bsk.model
+package dev.mbo.poi.model
 
 data class POIModel(
     val validFrom: Long,

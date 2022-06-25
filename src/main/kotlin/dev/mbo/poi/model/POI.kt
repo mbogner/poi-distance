@@ -14,21 +14,29 @@
  * limitations under the License.
  */
 
-package at.oebb.bsk.util
+package dev.mbo.poi.model
 
-import at.oebb.bsk.model.POIModel
 import java.math.BigDecimal
+import java.math.MathContext
 import java.math.RoundingMode
-import java.util.concurrent.ThreadLocalRandom
 
-class RandomNumberUtil {
+data class POI(
+    val id: String,
+    val name: String,
+    val coordinate: Coordinate,
+) {
 
-    companion object {
-        fun randomBigDecimal(min: BigDecimal, max: BigDecimal, scale: Int = POIModel.COORDINATE_SCALE): BigDecimal {
-            return BigDecimal(
-                ThreadLocalRandom.current().nextDouble(min.toDouble(), max.toDouble())
-            ).setScale(scale, RoundingMode.HALF_UP)
-        }
+    @Volatile
+    var distance: BigDecimal? = null
+
+    fun distanceFrom(coordinate: Coordinate): BigDecimal {
+        // sqrt(x^2 + y^2) rounded to COORDINATE_SCALE with rounding mode half_up
+        return (
+                this.coordinate.lon.minus(coordinate.lon).pow(2) +
+                        this.coordinate.lat.minus(coordinate.lat).pow(2)
+                )
+            .sqrt(MathContext.DECIMAL64)
+            .setScale(POIModel.COORDINATE_SCALE, RoundingMode.HALF_UP)
     }
 
 }
