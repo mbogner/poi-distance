@@ -21,6 +21,7 @@ import at.oebb.bsk.model.POI
 import java.time.Instant
 
 interface POIService {
+
     /**
      * Translates a given coordinate to the closest POI(s). If no appropriate POI can be found the result is empty.
      * @param coordinate The coordinates to get closest POI for.
@@ -28,7 +29,13 @@ interface POIService {
      */
     fun getPOI(coordinate: Coordinate, timestamp: Instant): Set<POI>
 
+    /**
+     * Updates POI list from source.
+     */
     fun update()
 
+    /**
+     * Gives the overall number of POIs known at the moment.
+     */
     fun size(): Int
 }

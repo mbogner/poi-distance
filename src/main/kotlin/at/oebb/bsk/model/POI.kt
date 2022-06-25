@@ -32,8 +32,8 @@ data class POI(
     fun distanceFrom(coordinate: Coordinate): BigDecimal {
         // sqrt(x^2 + y^2) rounded to COORDINATE_SCALE with rounding mode half_up
         return (
-                this.coordinate.lon.minus(coordinate.lon).abs().pow(2) +
-                        this.coordinate.lat.minus(coordinate.lat).abs().pow(2)
+                this.coordinate.lon.minus(coordinate.lon).pow(2) +
+                        this.coordinate.lat.minus(coordinate.lat).pow(2)
                 )
             .sqrt(MathContext.DECIMAL64)
             .setScale(POIModel.COORDINATE_SCALE, RoundingMode.HALF_UP)

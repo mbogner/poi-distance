@@ -16,44 +16,21 @@
 
 package at.oebb.bsk
 
-import at.oebb.bsk.model.Coordinate
-import at.oebb.bsk.model.POI
 import at.oebb.bsk.model.POIModel
 import at.oebb.bsk.util.RessourceUtil
 import com.fasterxml.jackson.databind.ObjectMapper
-import java.time.Instant
-import java.util.stream.Collectors
 
+/**
+ * Implementation for POIService with JSON-file backed data.
+ */
 class POIServiceJson(
     private val json: ObjectMapper,
     private val filename: String,
-) : POIService {
+) : AbstractPOIService() {
 
-    private var model: POIModel? = null
-
-    @OptIn(ExperimentalStdlibApi::class)
-    override fun getPOI(coordinate: Coordinate, timestamp: Instant): Set<POI> {
-        if (null == model) {
-            update()
-        }
-        val validFrom = Instant.ofEpochSecond(model!!.validFrom)
-        if (timestamp.isBefore(validFrom)) {
-            throw IllegalStateException("model isn't valid yet")
-        }
-        model!!.pois.forEach {
-            it.distance = it.distanceFrom(coordinate)
-        }
-
-        val minimumDistancePoi = model!!.pois.stream().min(Comparator.comparing(POI::distance))
-        if (minimumDistancePoi.isEmpty) {
-            return emptySet()
-        }
-        return model!!.pois.stream()
-            .filter { it.distance == minimumDistancePoi.get().distance }
-            .collect(Collectors.toSet())
-            .toSortedSet(Comparator.comparing(POI::id))
-    }
-
+    /**
+     * @see POIService.update
+     */
     override fun update() {
         model = json.readValue(RessourceUtil.loadClasspathRessource(filename), POIModel::class.java)
         if (null == model) {
@@ -62,10 +39,6 @@ class POIServiceJson(
         if (model!!.pois.isEmpty()) {
             throw IllegalStateException("no pois imported from $filename")
         }
-    }
-
-    override fun size(): Int {
-        return model?.pois?.size ?: 0
     }
 
 }

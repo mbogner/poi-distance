@@ -21,6 +21,6 @@ data class POIModel(
     val pois: Set<POI>,
 ) {
     companion object {
-        val COORDINATE_SCALE = 8
+        const val COORDINATE_SCALE = 8
     }
 }
