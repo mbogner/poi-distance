@@ -8,9 +8,9 @@ The following sample first reads data from a json file and then find points with
 coordinate.
 
 ```kotlin
-val service = POIServiceJson(jacksonObjectMapper(), "generated.json")
+val service = POIServiceJson(jacksonObjectMapper(), "GIP_PV_STOPS_EU-DEL-V-20220627.json")
 service.update()
-val pois: Set<POI> = service.getPOI(Coordinate(BigDecimal.ZERO, BigDecimal.ZERO), Instant.now())
+val pois: Set<Feature> = service.getPOI(Coordinate(BigDecimal.ZERO, BigDecimal.ZERO), Instant.now())
 ```
 
 The contained test data set contains two points with the same distance so both are returned. See POIServiceJsonTest for
