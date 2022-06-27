@@ -13,9 +13,6 @@ service.update()
 val pois: Set<Feature> = service.getPOI(Coordinate(BigDecimal.ZERO, BigDecimal.ZERO), Instant.now())
 ```
 
-The contained test data set contains two points with the same distance so both are returned. See POIServiceJsonTest for
-fur the complete sample.
-
 ## Data
 
 [Data source](https://data.oebb.at/#default/datasetDetail): [ÖBB-Infrastruktur AG](http://infrastruktur.oebb.at/de/)
