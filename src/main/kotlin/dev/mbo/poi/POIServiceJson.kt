@@ -21,30 +21,45 @@ import dev.mbo.poi.model.Model
 import dev.mbo.poi.util.RessourceUtil
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.io.File
 
 /**
  * Implementation for POIService with JSON-file backed data.
  */
 class POIServiceJson(
     private val json: ObjectMapper,
-    private val filename: String,
+    private val source: String,
 ) : AbstractPOIService() {
 
     private val log: Logger = LoggerFactory.getLogger(javaClass)
+
+    override fun getCacheFile(): File {
+        return File.createTempFile("poi", "json")
+    }
 
     /**
      * @see POIService.update
      */
     override fun update() {
         val start = System.currentTimeMillis()
-        model = json.readValue(RessourceUtil.loadClasspathRessource(filename), Model::class.java)
-        val duration = System.currentTimeMillis() - start
-        log.debug("parsed $filename in $duration ms")
-        if (null == model) {
-            throw IllegalStateException("reading $filename resulted in empty model")
+        model = if (source.startsWith("classpath:")) {
+            val cpSource = source.replace("classpath:", "")
+            log.debug("reading file from classpath@ {}", cpSource)
+            json.readValue(RessourceUtil.loadClasspathRessourceStream(cpSource), Model::class.java)
+        } else if (source.startsWith("/")) {
+            log.debug("reading file from absolute path {}", source)
+            json.readValue(File(source), Model::class.java)
+        } else {
+            throw IllegalArgumentException("invalid source: $source")
         }
-        if (model!!.features.isEmpty()) {
-            throw IllegalStateException("no features imported from $filename")
+        val duration = System.currentTimeMillis() - start
+        if (null == model) {
+            throw IllegalStateException("reading $source resulted in empty model")
+        }
+        val size = size()
+        log.debug("parsed {} ({} entries) in {} ms", source, size, duration)
+        if (size < 1) {
+            throw IllegalStateException("no features imported from $source")
         }
     }
 

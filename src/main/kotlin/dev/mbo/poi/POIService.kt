@@ -27,7 +27,7 @@ interface POIService {
      * @param coordinate The coordinates to get closest POI for.
      * @return Set of POIs with lowest distance.
      */
-    fun getPOI(coordinate: Coordinate, timestamp: Instant): Set<Feature>
+    fun getPOI(coordinate: Coordinate, timestamp: Instant, logDuration: Boolean = false): Set<Feature>
 
     /**
      * Updates POI list from source.

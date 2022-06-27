@@ -19,6 +19,9 @@ package dev.mbo.poi
 import dev.mbo.poi.model.Coordinate
 import dev.mbo.poi.model.Feature
 import dev.mbo.poi.model.Model
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import java.io.File
 import java.time.Instant
 import java.util.Date
 import java.util.stream.Collectors
@@ -28,13 +31,16 @@ import java.util.stream.Collectors
  */
 abstract class AbstractPOIService : POIService {
 
+    private val log: Logger = LoggerFactory.getLogger(javaClass)
     protected var model: Model? = null
 
     /**
      * @see POIService.getPOI
      */
-    override fun getPOI(coordinate: Coordinate, timestamp: Instant): Set<Feature> {
+    override fun getPOI(coordinate: Coordinate, timestamp: Instant, logDuration: Boolean): Set<Feature> {
+        val start = System.currentTimeMillis()
         if (null == model) {
+            log.warn("implicitly run update")
             update()
         }
 
@@ -51,9 +57,14 @@ abstract class AbstractPOIService : POIService {
         if (minimumDistancePoi.isEmpty) {
             return emptySet()
         }
-        return validFeatures.stream()
+        val result = validFeatures.stream()
             .filter { it.distance == minimumDistancePoi.get().distance }
             .collect(Collectors.toSet())
+        val duration = System.currentTimeMillis() - start
+        if (logDuration) {
+            log.debug("getPOI({},{}) took {}ms", coordinate.lat, coordinate.lon, duration)
+        }
+        return result
     }
 
     /**
@@ -62,5 +73,7 @@ abstract class AbstractPOIService : POIService {
     override fun size(): Int {
         return model?.features?.size ?: 0
     }
+
+    protected abstract fun getCacheFile(): File
 
 }

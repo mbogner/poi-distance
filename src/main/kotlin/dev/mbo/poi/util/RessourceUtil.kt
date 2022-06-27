@@ -17,6 +17,7 @@
 package dev.mbo.poi.util
 
 import java.io.InputStream
+import java.net.URL
 
 class RessourceUtil {
 
@@ -26,11 +27,18 @@ class RessourceUtil {
          * @param path of the resource to load relative to class or absolute starting from classpath root. Prefixing
          *             with classpath: or file: is not necessary.
          */
-        fun loadClasspathRessource(path: String): InputStream {
+        fun loadClasspathRessourceStream(path: String): InputStream {
             return this::class.java.getResourceAsStream(path) ?: throw IllegalStateException(
                 "could not load $path from classpath"
             )
         }
+
+        fun loadClasspathRessource(path: String): URL {
+            return this::class.java.getResource(path) ?: throw IllegalStateException(
+                "could not load $path from classpath"
+            )
+        }
+
     }
 
 }
