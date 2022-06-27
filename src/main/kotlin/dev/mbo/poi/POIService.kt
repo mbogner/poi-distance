@@ -17,7 +17,7 @@
 package dev.mbo.poi
 
 import dev.mbo.poi.model.Coordinate
-import dev.mbo.poi.model.POI
+import dev.mbo.poi.model.Feature
 import java.time.Instant
 
 interface POIService {
@@ -27,7 +27,7 @@ interface POIService {
      * @param coordinate The coordinates to get closest POI for.
      * @return Set of POIs with lowest distance.
      */
-    fun getPOI(coordinate: Coordinate, timestamp: Instant): Set<POI>
+    fun getPOI(coordinate: Coordinate, timestamp: Instant): Set<Feature>
 
     /**
      * Updates POI list from source.

@@ -16,7 +16,6 @@
 
 package dev.mbo.poi.model
 
-import dev.mbo.poi.util.RandomNumberUtil
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
@@ -39,20 +38,6 @@ internal class CoordinateTest {
         }
         assertThrows(IllegalArgumentException::class.java) {
             Coordinate(lat = BigDecimal.ZERO, lon = Coordinate.LON_MAX.add(diff))
-        }
-    }
-
-    companion object {
-        fun createRandomValidCoordinate(): Coordinate {
-            return Coordinate(lat = createRandomValidLat(), lon = createRandomValidLon())
-        }
-
-        private fun createRandomValidLat(): BigDecimal {
-            return RandomNumberUtil.randomBigDecimal(Coordinate.LAT_MIN, Coordinate.LAT_MAX)
-        }
-
-        private fun createRandomValidLon(): BigDecimal {
-            return RandomNumberUtil.randomBigDecimal(Coordinate.LON_MIN, Coordinate.LON_MAX)
         }
     }
 

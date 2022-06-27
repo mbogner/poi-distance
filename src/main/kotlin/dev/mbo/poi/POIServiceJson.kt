@@ -16,9 +16,11 @@
 
 package dev.mbo.poi
 
-import dev.mbo.poi.model.POIModel
-import dev.mbo.poi.util.RessourceUtil
 import com.fasterxml.jackson.databind.ObjectMapper
+import dev.mbo.poi.model.Model
+import dev.mbo.poi.util.RessourceUtil
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Implementation for POIService with JSON-file backed data.
@@ -28,16 +30,21 @@ class POIServiceJson(
     private val filename: String,
 ) : AbstractPOIService() {
 
+    private val log: Logger = LoggerFactory.getLogger(javaClass)
+
     /**
      * @see POIService.update
      */
     override fun update() {
-        model = json.readValue(RessourceUtil.loadClasspathRessource(filename), POIModel::class.java)
+        val start = System.currentTimeMillis()
+        model = json.readValue(RessourceUtil.loadClasspathRessource(filename), Model::class.java)
+        val duration = System.currentTimeMillis() - start
+        log.debug("parsed $filename in $duration ms")
         if (null == model) {
             throw IllegalStateException("reading $filename resulted in empty model")
         }
-        if (model!!.pois.isEmpty()) {
-            throw IllegalStateException("no pois imported from $filename")
+        if (model!!.features.isEmpty()) {
+            throw IllegalStateException("no features imported from $filename")
         }
     }
 

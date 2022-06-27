@@ -16,35 +16,55 @@
 
 package dev.mbo.poi
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jsonMapper
+import com.fasterxml.jackson.module.kotlin.kotlinModule
 import dev.mbo.poi.model.Coordinate
-import dev.mbo.poi.model.POI
+import dev.mbo.poi.model.Feature
 import dev.mbo.poi.util.RessourceUtilTest
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 import java.time.Instant
 
+fun testJacksonObjectMapper(): ObjectMapper = jsonMapper { addModule(kotlinModule()).addModule(JavaTimeModule()) }
+
 internal class POIServiceJsonTest {
+
 
     private lateinit var service: POIServiceJson
 
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(POIServiceJsonTest::class.java)
+
+        @BeforeAll
+        @JvmStatic
+        fun beforeAll() {
+            log.info("set UTC")
+            System.setProperty("user.timezone", "UTC")
+        }
+    }
+
     @BeforeEach
     fun beforeEach() {
-        service = POIServiceJson(jacksonObjectMapper(), RessourceUtilTest.TEST_FILE)
+        service = POIServiceJson(testJacksonObjectMapper(), RessourceUtilTest.TEST_FILE)
     }
 
     @Test
     fun getPOI() {
         service.update()
         val start = System.currentTimeMillis()
-        val pois: Set<POI> = service.getPOI(Coordinate(BigDecimal.ZERO, BigDecimal.ZERO), Instant.now())
+        val features: Set<Feature> = service.getPOI(Coordinate(BigDecimal("48.45718202101379"), BigDecimal("13.434536595612848")), Instant.now())
         val duration = System.currentTimeMillis() - start
-        println("processed ${service.size()} in $duration ms")
-        assertThat(pois).hasSize(2)
-        assertThat(pois.elementAt(0).id).isEqualTo("id1")
-        assertThat(pois.elementAt(1).id).isEqualTo("id2")
+        log.debug("processed ${service.size()} in $duration ms")
+        assertThat(features).hasSize(1)
+        val entry = features.elementAt(0)
+        assertThat(entry.properties.OBJECTID).isEqualTo(30)
     }
 
 }

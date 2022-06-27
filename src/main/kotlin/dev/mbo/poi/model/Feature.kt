@@ -16,27 +16,30 @@
 
 package dev.mbo.poi.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 
-data class POI(
-    val id: String,
-    val name: String,
-    val coordinate: Coordinate,
-) {
-
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class Feature(
+    val type: String,
+    val properties: FeatureProperties,
+) : Comparable<Feature> {
     @Volatile
     var distance: BigDecimal? = null
 
     fun distanceFrom(coordinate: Coordinate): BigDecimal {
         // sqrt(x^2 + y^2) rounded to COORDINATE_SCALE with rounding mode half_up
         return (
-                this.coordinate.lon.minus(coordinate.lon).pow(2) +
-                        this.coordinate.lat.minus(coordinate.lat).pow(2)
+                this.properties.X_KOORDINATE.minus(coordinate.lon).pow(2) +
+                        this.properties.Y_KOORDINATE.minus(coordinate.lat).pow(2)
                 )
             .sqrt(MathContext.DECIMAL64)
-            .setScale(POIModel.COORDINATE_SCALE, RoundingMode.HALF_UP)
+            .setScale(Model.COORDINATE_SCALE, RoundingMode.HALF_UP)
     }
 
+    override fun compareTo(other: Feature): Int {
+        return properties.OBJECTID.compareTo(other.properties.OBJECTID)
+    }
 }

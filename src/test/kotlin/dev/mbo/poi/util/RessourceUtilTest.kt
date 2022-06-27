@@ -24,7 +24,7 @@ import java.util.UUID
 internal class RessourceUtilTest {
 
     companion object {
-        const val TEST_FILE = "/generated.json"
+        const val TEST_FILE = "/tmp/GIP_PV_STOPS_EU-DEL-V-20220627.json"
     }
 
     @Test

@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package dev.mbo.poi.util
+package dev.mbo.poi.model
 
-import dev.mbo.poi.model.POIModel
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.util.concurrent.ThreadLocalRandom
-
-class RandomNumberUtil {
-
+data class Model(
+    val type: String,
+    val name: String,
+    val features: Set<Feature>,
+) {
     companion object {
-        fun randomBigDecimal(min: BigDecimal, max: BigDecimal, scale: Int = POIModel.COORDINATE_SCALE): BigDecimal {
-            return BigDecimal(
-                ThreadLocalRandom.current().nextDouble(min.toDouble(), max.toDouble())
-            ).setScale(scale, RoundingMode.HALF_UP)
-        }
+        const val COORDINATE_SCALE = 8
     }
-
 }

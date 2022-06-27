@@ -16,11 +16,20 @@
 
 package dev.mbo.poi.model
 
-data class POIModel(
-    val validFrom: Long,
-    val pois: Set<POI>,
-) {
-    companion object {
-        const val COORDINATE_SCALE = 8
-    }
-}
+import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import java.math.BigDecimal
+import java.util.Date
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Suppress("SpellCheckingInspection")
+data class FeatureProperties(
+    val OBJECTID: Long,
+    val X_KOORDINATE: BigDecimal,
+    val Y_KOORDINATE: BigDecimal,
+    val NAME_SNNB: String,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd")
+    val VALIDFROM: Date,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd")
+    val VALIDTO: Date,
+)

@@ -15,3 +15,7 @@ val pois: Set<POI> = service.getPOI(Coordinate(BigDecimal.ZERO, BigDecimal.ZERO)
 
 The contained test data set contains two points with the same distance so both are returned. See POIServiceJsonTest for
 fur the complete sample.
+
+## Data
+
+The data file needed for the tests isn't included in this project

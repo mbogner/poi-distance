@@ -17,9 +17,10 @@
 package dev.mbo.poi
 
 import dev.mbo.poi.model.Coordinate
-import dev.mbo.poi.model.POI
-import dev.mbo.poi.model.POIModel
+import dev.mbo.poi.model.Feature
+import dev.mbo.poi.model.Model
 import java.time.Instant
+import java.util.Date
 import java.util.stream.Collectors
 
 /**
@@ -27,38 +28,39 @@ import java.util.stream.Collectors
  */
 abstract class AbstractPOIService : POIService {
 
-    protected var model: POIModel? = null
+    protected var model: Model? = null
 
     /**
      * @see POIService.getPOI
      */
-    override fun getPOI(coordinate: Coordinate, timestamp: Instant): Set<POI> {
+    override fun getPOI(coordinate: Coordinate, timestamp: Instant): Set<Feature> {
         if (null == model) {
             update()
         }
-        val validFrom = Instant.ofEpochSecond(model!!.validFrom)
-        if (timestamp.isBefore(validFrom)) {
-            throw IllegalStateException("model isn't valid yet")
+
+        val today = Date()
+        val validFeatures = model!!.features.filter {
+            today.after(it.properties.VALIDFROM) && today.before(it.properties.VALIDTO)
         }
-        model!!.pois.forEach {
+
+        validFeatures.forEach {
             it.distance = it.distanceFrom(coordinate)
         }
 
-        val minimumDistancePoi = model!!.pois.stream().min(Comparator.comparing(POI::distance))
+        val minimumDistancePoi = validFeatures.stream().min(Comparator.comparing(Feature::distance))
         if (minimumDistancePoi.isEmpty) {
             return emptySet()
         }
-        return model!!.pois.stream()
+        return validFeatures.stream()
             .filter { it.distance == minimumDistancePoi.get().distance }
             .collect(Collectors.toSet())
-            .toSortedSet(Comparator.comparing(POI::id))
     }
 
     /**
      * @see POIService.size
      */
     override fun size(): Int {
-        return model?.pois?.size ?: 0
+        return model?.features?.size ?: 0
     }
 
 }
