@@ -25,6 +25,7 @@ import java.util.Date
 @Suppress("SpellCheckingInspection")
 data class FeatureProperties(
     val OBJECTID: Long,
+    val DB640_CODE: String,
     val X_KOORDINATE: BigDecimal,
     val Y_KOORDINATE: BigDecimal,
     val NAME_SNNB: String,
